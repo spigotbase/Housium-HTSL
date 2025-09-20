@@ -17,7 +17,7 @@ export function isImporting() {
  * @returns 
  */
 export function compile(fileName, dissallowedFiles, nested) {
-	try {
+	// try {
 		if (!dissallowedFiles) dissallowedFiles = [];
 		let importText;
 		if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${fileName}.htsl`)) {
@@ -66,11 +66,11 @@ export function compile(fileName, dissallowedFiles, nested) {
 		if (!nested) {
 			if (!loadAction(actionobj)) return false;
 		} else return actionobj.map(n => { n.compiled = true; return n });
-	} catch (error) {
-		ChatLib.chat(`&3[HTSL] &eEncountered an unknown error, please seek support about the following error:`);
-		ChatLib.chat(error);
-		console.error(error);
-	}
+	// } catch (error) {
+	// 	ChatLib.chat(`&3[HTSL] &eEncountered an unknown error, please seek support about the following error:`);
+	// 	ChatLib.chat(error);
+	// 	console.error(error);
+	// }
 }
 
 /**
@@ -179,7 +179,7 @@ function getArgs(input) {
 				shortcuts.forEach((shortcut) => {
 					arg = arg.replaceAll(shortcut.name, shortcut.value);
 				});
-				try {
+				// try {
 					arg = evaluateExpression(arg);
 					let shortcut = shortcuts.find(m => m.name === arg);
 					if (shortcut) {
@@ -200,9 +200,9 @@ function getArgs(input) {
 					else if (arg !== "") args.push(arg);
 					arg = "";
 					continue;
-				} catch (e) {
-					return false; // Invalid expression
-				}
+				// } catch (e) {
+				// 	return false; // Invalid expression
+				// }
 			} else {
                 if (input[i] === "\\" && ["\"", "(", "{", "%", "\\"].includes(input[i + 1])) i++;
 
@@ -243,6 +243,7 @@ function getArgs(input) {
  * @returns The result of the expression
  */
 function evaluateExpression(expression) {
+    console.log(expression);
 	let func = new Function('return ' + String(expression).replaceAll("(", "evaluateExpression("));
 	return func().toString().replaceAll("evalExpression(", "(");
 }
@@ -308,8 +309,25 @@ function validOperator(operator) {
 		case "//=":
 			operator = "divide";
 			break;
+        case "&=":
+            operator = "bitwise and";
+            break;
+        case "|=":
+            operator = "bitwise or";
+            break;
+        case "^=":
+            operator = "bitwise xor";
+            break;
+        case "shl":
+        case "<<=":
+            operator = "left shift";
+            break;
+        case "shr":
+        case ">>=":
+            operator = "right shift";
+            break;
 	}
-	if (!['increment', 'decrement', 'set', 'multiply', 'divide', "unset"].includes(operator.toLowerCase())) return `Unknown operator &e${operator}&c on &eline {line}`;
+	if (!['increment', 'decrement', 'set', 'multiply', 'divide', "unset", "bitwise and", "bitwise or", "bitwise xor", "left shift", "right shift"].includes(operator.toLowerCase())) return `Unknown operator &e${operator}&c on &eline {line}`;
 	return operator.toUpperCase();
 }
 
@@ -622,7 +640,7 @@ export function preProcess(importActions, dissallowedFiles) {
 				fileCall[0].context = gotoArgs[1].toUpperCase();
 				fileCall[0].contextTarget = { name: gotoArgs[2].match(/^"(?:.*)"$/) };
 				actionobj.push(...fileCall);
-			} else if (gotoArgs.length == 6 && ["region", "gui", "custommenu"].includes(gotoArgs[2]) && gotoArgs[4] == "as") {
+			} else if (gotoArgs.length == 6 && ["region", "gui", "custommenu", "npc"].includes(gotoArgs[2]) && gotoArgs[4] == "as") {
 				if (dissallowedFiles.includes(gotoArgs[4])) return `&3[HTSL] &cNested file calls detected`;
 				let fileCall = compile(gotoArgs[4], dissallowedFiles, true);
 				fileCall[0].context = gotoArgs[1].toUpperCase();

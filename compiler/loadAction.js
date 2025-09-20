@@ -37,7 +37,8 @@ export function loadAction(script, deleteExisting) {
                     break;
                 case "NPC":
                     addOperation({ type: 'goto', name: script[container].contextTarget.name });
-                    addOperation({ type: 'click', slot: 12 });
+                    addOperation({ type: 'click', slot: 20 });
+                    addOperation({ type: 'option', option: script[container].contextTarget.trigger });
                     break;
                 case "BUTTON":
                     addOperation({ type: 'goto', name: script[container].contextTarget.name });
@@ -80,7 +81,7 @@ function importComponent(component, menu, condition) {
     addOperation({ type: 'setGuiContext', context: component.type });
     if (condition) menu.inverted = {default_value: false, slot: 9, type: "toggle"};
     for (let key in component) {
-        if (key === "type") continue;
+        if (["type", "page"].includes(key)) continue;
         if (JSON.stringify(menu[key].default_value).toLowerCase() === JSON.stringify(component[key]).replace("_", " ").toLowerCase()) continue;
         if (menu[key].default_value === component[key]) continue;
         if (component[key] === undefined) continue;
@@ -91,7 +92,10 @@ function importComponent(component, menu, condition) {
                 change -= 1;
             }
         }
-        addOperation({ type: 'click', slot: setting.slot + change });
+        if (menu[key].page != null) {
+            addOperation({ type: 'click', slot: 35 }); // Yeah its hardcoded but it's all for one setting so do you think I care
+        }
+        if (setting.type !== "static_list_select") addOperation({ type: 'click', slot: setting.slot + change });
         switch (setting.type) {
             case "string_input":
                 addOperation({ type: 'input', text: component[key] });
@@ -108,6 +112,17 @@ function importComponent(component, menu, condition) {
             case "static_option_select":
                 // Static option select is for Hypixel made options, which will be uppercase for the first character
                 addOperation({ type: 'option', option: menu[key].options.find(n => n.toLowerCase() == component[key].replace("_", " ").toLowerCase()) });
+                break;
+            case "static_list_select": // Cyclic menu
+                if ((menu[key].options.length + (menu[key].default_value == null ? 1 : 0)) / 2 > menu[key].options.indexOf(component[key])) {
+                    for (let i = 0; i < menu[key].options.indexOf(component[key]) + (menu[key].default_value == null ? 1 : 0); i++) {
+                        addOperation({ type: 'click', slot: setting.slot + change });
+                    }
+                } else {
+                    for (let i = 0; i < menu[key].options.length - menu[key].options.indexOf(component[key]); i++) {
+                        addOperation({ type: 'click', slot: setting.slot + change, button: 1 });
+                    }
+                }
                 break;
             case "dynamic_option_select":
                 addOperation({ type: 'option', option: component[key] });
@@ -149,6 +164,10 @@ function importComponent(component, menu, condition) {
             case "custom_time":
                 addOperation({ type: 'click', slot: 48 }); // click "Custom Time"
                 addOperation({ type: 'input', text: component[key] });
+        }
+        
+        if (menu[key].page != null) {
+            addOperation({ type: 'click', slot: 27 });
         }
     }
 

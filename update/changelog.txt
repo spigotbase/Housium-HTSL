@@ -1,3 +1,8 @@
-Patch 1.3.5:
+Patch 1.4.0:
 - Bug fixes
-- Added goto gui "name" slot
+- Menu navigation changes
+- Temporarily disabled exporting
+- Added &=, |=, ^= for bitwise AND, OR, and XOR operations respectively
+- Added <<=, shl for left shift and >>=, shr for right shift operations
+- Drop item supports new settings: dropItem <item> <location> <drop_naturally> <disable_item_merging> <prioritize_player> <fallback_to_inventory> <despawn_duration_ticks> <pickup_delay_ticks>
+- goto npc "name" "Left/Right Click Actions" now supported

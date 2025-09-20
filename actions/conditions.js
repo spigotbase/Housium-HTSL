@@ -38,7 +38,7 @@ export default {
         holder: {
             slot: 10,
             default_value: "Player",
-            type: "static_option_select",
+            type: "static_list_select",
             options: [
                 "Player",
                 "Global",
@@ -291,7 +291,7 @@ export default {
         required_gamemode: {
             slot: 10,
             default_value: null,
-            type: "static_option_select",
+            type: "static_list_select",
             options: [
                 "Adventure",
                 "Survival",

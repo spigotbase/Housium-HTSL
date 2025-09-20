@@ -8,7 +8,7 @@ export default {
         holder: {
             slot: 10,
             default_value: "Player",
-            type: "static_option_select",
+            type: "static_list_select",
             options: [
                 "Player",
                 "Global",
@@ -35,7 +35,12 @@ export default {
                 "Decrement",
                 "Set",
                 "Multiply",
-                "Divide"
+                "Divide",
+                "Bitwise AND",
+                "Bitwise OR",
+                "Bitwise XOR",
+                "Left Shift",
+                "Right Shift"
             ]
         },
         value: {
@@ -355,7 +360,7 @@ export default {
         gamemode: {
             slot: 10,
             default_value: null,
-            type: "static_option_select",
+            type: "static_list_select",
             options: [
                 "Adventure",
                 "Survival",
@@ -602,13 +607,24 @@ export default {
             default_value: false,
             type: "toggle"
         },
-        prioritize_player: {
+        despawn_duration_ticks: {
             slot: 14,
+            default_value: 6000,
+            type: "string_input"
+        },
+        pickup_delay_ticks: {
+            slot: 15,
+            default_value: 10,
+            type: "string_input"
+        },
+        prioritize_player: {
+            slot: 16,
             default_value: false,
             type: "toggle"
         },
         fallback_to_inventory: {
-            slot: 15,
+            slot: 10,
+            page: 1,
             default_value: false,
             type: "toggle"
         }
@@ -649,7 +665,7 @@ export default {
         weather: {
             slot: 10,
             default_value: null,
-            type: "static_option_select",
+            type: "static_list_select",
             options: [
                 "Sunny",
                 "Raining"
