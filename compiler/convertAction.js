@@ -1,4 +1,5 @@
 import { request as axios } from "axios";
+import Settings from "../utils/config";
 import syntaxs from "../actions/syntax";
 import menus from "../actions/menus";
 import _conditions from "../actions/conditions";
@@ -33,13 +34,18 @@ export function convertHE(actionId, filename) {
     })
 }
 
+
+let items = [];
+let exportName = "";
 /**
- * Converts a JSON file to HTSL. 
+ * Converts a JSON obj to HTSL. 
  * @param {object} json Json object to transform
  * @returns {string} The new HTSL file.
  */
-export function convertJSON(json) {
+export function convertJSON(json, name) {
     let script = [];
+    items = [];
+    exportName = name.substring(name.lastIndexOf("\\") + 1);
     for (let context in json) {
         if (json[context].context == "DEFAULT") {
         } else {
@@ -66,7 +72,7 @@ export function convertJSON(json) {
             script.push(convertComponent(actions[action], syntax, menu));
         }
     }
-    return script.join("\n");
+    return { script: script.join("\n"), items };
 }
 
 /**
@@ -140,6 +146,10 @@ function convertComponent(obj, syntax, menu, condition) {
             action = action.replace(property, conditionList.join(", "));
         } else if (menu[propertyName].type == "location") {
             action = action.replace(property, obj[propertyName]);
+            return;
+        } else if (menu[propertyName].type == "item" && obj[propertyName] != null) {
+            items.push({ name: `${Settings.itemPrefix.length > 1 ? "/" + Settings.itemPrefix + "/" : ""}${exportName}_item${items.length + 1}`, string: obj[propertyName] });
+            action = action.replace(property, `${exportName}_item${items.length}`);
             return;
         } else if (obj[propertyName] != null) {
             obj[propertyName] = String(obj[propertyName]).replaceAll(/("|\\)/g, "\\$1");

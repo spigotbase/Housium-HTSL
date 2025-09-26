@@ -1,6 +1,6 @@
 /// <reference types="../CTAutocomplete" />
 
-import './gui/LoadActionGUI';
+import { getSubDir } from './gui/LoadActionGUI';
 import Config from "./utils/config";
 import codeWindow from './gui/codeWindow';
 import { convertHE } from './compiler/convertAction';
@@ -24,7 +24,7 @@ register("command", ...args => {
     if (command === 'config') return Config.openGUI();
     if (command === 'gui') {
         args.shift();
-        return codeWindow(args.join(' '));
+        return codeWindow(`${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${args.join(' ')}`);
     }
     if (command === 'guide') {
         const guideLink = new Message(
@@ -43,21 +43,21 @@ register("command", ...args => {
     if (command === 'saveitem') {
         if (args.length < 2) return ChatLib.chat("&3[HTSL] &cPlease enter a filename to save it to!");
         let itemHeld = Player.getHeldItem().getNBT().toString().replace(/["]/g, '\\$&');
-        FileLib.write(`./config/ChatTriggers/modules/HTSL/imports/${args[1]}.json`, `{"item": "${itemHeld}"}`, true);
+        FileLib.write(`./config/ChatTriggers/modules/HTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args[1]}.json`, `{"item": "${itemHeld}"}`, true);
         return ChatLib.chat(`&3[HTSL] &fSaved item to ${args[1]}.json`);
     }
     if (command === 'convert') {
         if (args.length < 3) return ChatLib.chat("&3[HTSL] &cPlease enter the action id and then the filename to save it to!");
         convertHE(args[1], args[2]);
-        return ChatLib.chat(`&3[HTSL] &fConverting action into HTSL script saved at ${args[2]}.htsl`);
+        return ChatLib.chat(`&3[HTSL] &fConverting action into HTSL script saved at ${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${args[2]}.htsl`);
     }
     if (command === "addfunctions") {
         if (args.length == 1) return ChatLib.chat("&3[HTSL] &cPlease add a filename!");
         args.shift();
         let file = args.join(" ");
-        if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${file}.htsl`)) {
+        if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${file}.htsl`)) {
             Navigator.isReady = true;
-            preProcess(FileLib.read(`./config/ChatTriggers/modules/HTSL/imports/${file}.htsl`).split("\n")).filter(n => n.context == "FUNCTION").forEach((context, index) => {
+            preProcess(FileLib.read(`./config/ChatTriggers/modules/HTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${file}.htsl`).split("\n")).filter(n => n.context == "FUNCTION").forEach((context, index) => {
                 if (index > 0) addOperation({ type: 'closeGui' });
                 if (index > 0) addOperation({ type: 'wait', time: 1500 });
                 addOperation({ type: 'chat', text: `/function edit ${context.contextTarget.name}`, func: context.contextTarget.name, command: true });
@@ -72,7 +72,7 @@ register("command", ...args => {
     if (command === "listscripts") {
         let files;
         if (args.length == 1) {
-            files = readDir("./config/ChatTriggers/modules/HTSL/imports/", false).filter(e => e.endsWith("htsl") || e.endsWith("\\"));
+            files = readDir(`./config/ChatTriggers/modules/HTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}`, false).filter(e => e.endsWith("htsl") || e.endsWith("\\"));
         } else {
             args.shift();
             files = readDir(`./config/ChatTriggers/modules/HTSL/imports/${args.join(" ")}/`, false);
@@ -94,7 +94,7 @@ register("command", ...args => {
             return ChatLib.chat(`&3[HTSL] &cMust be in creative mode to import an item!`);
         }
         args.shift();
-        let nbt = JSON.parse(FileLib.read('HTSL', `/imports/${args.join(" ")}.json`)).item;
+        let nbt = JSON.parse(FileLib.read('HTSL', `/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args.join(" ")}.json`)).item;
         let item = getItemFromNBT(nbt);
         let slot = Player.getInventory().getItems().indexOf(null);
         if (slot < 9) slot += 36;
@@ -105,7 +105,7 @@ register("command", ...args => {
         if (args.length == 1) return ChatLib.chat("&3[HTSL] &cPlease add a filename!");
         args.shift();
         let file = args.join(" ");
-        if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${file}.htsl`)) {
+        if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${file}.htsl`)) {
             Navigator.isReady = true;
             let actions = compile(file, [], true);
             actions = actions.filter(n => n.context !== "DEFAULT");

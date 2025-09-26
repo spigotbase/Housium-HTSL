@@ -1,8 +1,8 @@
-Patch 1.4.0:
+Patch 1.4.1:
 - Bug fixes
-- Menu navigation changes
-- Temporarily disabled exporting
-- Added &=, |=, ^= for bitwise AND, OR, and XOR operations respectively
-- Added <<=, shl for left shift and >>=, shr for right shift operations
-- Drop item supports new settings: dropItem <item> <location> <drop_naturally> <disable_item_merging> <prioritize_player> <fallback_to_inventory> <despawn_duration_ticks> <pickup_delay_ticks>
-- goto npc "name" "Left/Right Click Actions" now supported
+- Changed how HTSL looks for item references from absolute to relative
+- New Item Path Prefix setting
+- Changed some /htsl commands to use Save Import Directories setting
+- Exporting now exports items
+- Added >>>= and lshr for logical right shift
+- Other changes to match latest Housing patch

@@ -19,11 +19,15 @@ export default (fileName) => {
 
     addOperation({
         type: "doneExport", func: () => {
-            FileLib.write("HTSL", `imports/${fileName}.htsl`, convertJSON([{
+            let script = convertJSON([{
                 context: "DEFAULT",
                 contextTarget: {},
                 actions: actionobjs
-            }]), true);
+            }], fileName);
+            FileLib.write("HTSL", `imports/${fileName}.htsl`, script.script, true);
+            for (let i = 0; i < script.items.length; i++) {
+                FileLib.write("HTSL", `imports/${fileName.substring(0, fileName.lastIndexOf("\\") + 1)}${script.items[i].name}.json`, script.items[i].string, true);
+            }
         }
     });
 }
@@ -142,7 +146,14 @@ function processPage(items, actionList, menuList, condition) {
                         actionobj[property] = value === "&aEnabled";
                         break;
                     case "item":
-                        actionobj[property] = null;
+                        if (!inAction) {
+                            forceOperation({ type: "back" });
+                            inAction = true;
+                        }
+                        forceOperation({ type: "export_item", func: (item) => {
+                            actionobj[property] = item;
+                        }});
+                        forceOperation({ type: "click", slot: menu[property].slot });
                         break;
                     case "location":
                         if (value === "House Spawn Location") actionobj[property] = "house_spawn";
@@ -150,6 +161,10 @@ function processPage(items, actionList, menuList, condition) {
                         else actionobj[property] = `"custom_coordinates" "${value.replaceAll(/(?:,|yaw: |pitch: )/g, "")}"`;
                         break;
                     default:
+                        if (!value) {
+                            actionobj[property] = null;
+                            break;
+                        }
                         if (!(value.startsWith("\"") && value.endsWith("\""))) value = value.replaceAll(",", "");
                         actionobj[property] = value;
                         break;

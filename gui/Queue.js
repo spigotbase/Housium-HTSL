@@ -89,6 +89,8 @@ register("tick", () => {
             }, operation.time);
         case "export":
             return operation.func(Player.getContainer().getItems().splice(0, Player.getContainer().getSize() - 9 - 36));
+        case "export_item":
+            return Navigator.getItemFromAction(operation.func);
         case "done":
             return doneLoading();
         case "doneExport":

@@ -40,7 +40,8 @@ export default {
                 "Bitwise OR",
                 "Bitwise XOR",
                 "Left Shift",
-                "Right Shift"
+                "Arithmetic Right Shift",
+                "Logical Right Shift"
             ]
         },
         value: {
@@ -623,8 +624,7 @@ export default {
             type: "toggle"
         },
         fallback_to_inventory: {
-            slot: 10,
-            page: 1,
+            slot: 19,
             default_value: false,
             type: "toggle"
         }

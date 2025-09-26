@@ -13,6 +13,9 @@ const C0EPacketClickWindow = Java.type(
 const C01PacketChatMessage = Java.type(
   "net.minecraft.network.play.client.C01PacketChatMessage"
 );
+const S2FPacketSetSlot = Java.type(
+    "net.minecraft.network.play.server.S2FPacketSetSlot"
+);
 const slotIdField =
   C0EPacketClickWindow.class.getDeclaredField("field_149552_b");
 slotIdField.setAccessible(true);
@@ -272,6 +275,23 @@ function deleteAction() {
   click(10, 1);
 }
 
+let itemCallback;
+function getItemFromAction(callback) {
+    Navigator.waitingForItem = true;
+    Navigator.isWorking = true;
+    click(13);
+    itemCallback = callback;
+}
+
+register("packetReceived", (packet) => {
+    if (!Navigator.isWorking) return;
+    if (!Navigator.waitingForItem) return;
+    if (!packet.func_149174_e()) return;
+    itemCallback(`{"item": "${new Item(packet.func_149174_e()).getNBT().toString().replace(/["]/g, '\\$&')}"}`);
+    Navigator.waitingForItem = false;
+    click(31);
+}).setFilteredClass(S2FPacketSetSlot);
+
 export default Navigator = {
   isWorking: false,
   isReady: false,
@@ -282,8 +302,10 @@ export default Navigator = {
   isDeleting: false,
   guiIsLoading: true,
   goto: false,
+  waitingForItem: false,
   itemsLoaded: { items: {}, lastItemAddedTimestamp: 0 },
   selectOption,
+  getItemFromAction,
   selectItem,
   setSelecting,
   click,

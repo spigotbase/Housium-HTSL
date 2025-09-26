@@ -36,8 +36,12 @@ export function loadAction(script, deleteExisting) {
                     addOperation({ type: 'chat', text: `/customcommands edit ${script[container].contextTarget.name}`, func: "/customcommands create " + script[container].contextTarget.name, command: true });
                     break;
                 case "NPC":
+                    // Original would have optimized to not require the player to go to the NPC, but because of protections on the Housing Menu HTSL cannot use this.
+                    // addOperation({ type: 'chat', text: `/menu`, command: true });
+                    // addOperation({ type: 'option', option: "Systems" });
+                    // addOperation({ type: 'option', option: "NPCs" });
+                    // addOperation({ type: 'option', option: script[container].contextTarget.name });
                     addOperation({ type: 'goto', name: script[container].contextTarget.name });
-                    addOperation({ type: 'click', slot: 20 });
                     addOperation({ type: 'option', option: script[container].contextTarget.trigger });
                     break;
                 case "BUTTON":
@@ -81,7 +85,7 @@ function importComponent(component, menu, condition) {
     addOperation({ type: 'setGuiContext', context: component.type });
     if (condition) menu.inverted = {default_value: false, slot: 9, type: "toggle"};
     for (let key in component) {
-        if (["type", "page"].includes(key)) continue;
+        if (["type"].includes(key)) continue;
         if (JSON.stringify(menu[key].default_value).toLowerCase() === JSON.stringify(component[key]).replace("_", " ").toLowerCase()) continue;
         if (menu[key].default_value === component[key]) continue;
         if (component[key] === undefined) continue;
@@ -91,9 +95,6 @@ function importComponent(component, menu, condition) {
             if (component.holder !== undefined && !["holder", "inverted"].includes(key)) {
                 change -= 1;
             }
-        }
-        if (menu[key].page != null) {
-            addOperation({ type: 'click', slot: 35 }); // Yeah its hardcoded but it's all for one setting so do you think I care
         }
         if (setting.type !== "static_list_select") addOperation({ type: 'click', slot: setting.slot + change });
         switch (setting.type) {
@@ -164,10 +165,6 @@ function importComponent(component, menu, condition) {
             case "custom_time":
                 addOperation({ type: 'click', slot: 48 }); // click "Custom Time"
                 addOperation({ type: 'input', text: component[key] });
-        }
-        
-        if (menu[key].page != null) {
-            addOperation({ type: 'click', slot: 27 });
         }
     }
 

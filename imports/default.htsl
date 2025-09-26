@@ -1,3 +1,3 @@
-goto npc "Bob" "Left Click Actions"
-globalvar Kills <<= 1 false
+goto npc "Baldrick" "Left Click Actions"
+globalvar Kills >>>= 1 false
 dropItem stone invokers_location false false false true 10 10

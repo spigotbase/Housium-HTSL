@@ -78,6 +78,14 @@ class Settings {
 
 	// Importing/Exporting 
 
+    @TextProperty({
+        name: "Item Path Prefix",
+        description: "Modifies where HTSL looks for/places item references (e.g. \"items\" will look in /project folder/items/)",
+        category: "Importing/Exporting",
+        subcategory: "Importing/Exporting"
+    })
+    itemPrefix = "";
+
 	@SwitchProperty({
 		name: "Safe Mode",
 		description: 'Will show you where to click while loading in an action, this requires manual input and is no longer considered a "macro".\n\n&aSafeMode is recommended if you want to be extra careful not to break the rules.',

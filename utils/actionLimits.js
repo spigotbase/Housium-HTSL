@@ -13,7 +13,7 @@ const limits = {
     "LAUNCH_TO_TARGET": 5,
     "CLEAR_EFFECTS": 5,
     "CLOSE_MENU": 1,
-    "CONDITIONAL": 30,
+    "CONDITIONAL": 40,
     "ACTION_BAR": 5,
     "DISPLAY_MENU": 10,
     "TITLE": 5,

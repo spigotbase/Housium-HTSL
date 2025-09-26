@@ -1,9 +1,11 @@
 import { loadAction, working } from "./loadAction";
+import Settings from "../utils/config";
 import menus from "../actions/menus";
 import conditions from "../actions/conditions";
 import syntaxes from "../actions/syntax";
 
 let shortcuts = [];
+let path = "";
 
 export function isImporting() {
 	return working();
@@ -17,6 +19,7 @@ export function isImporting() {
  * @returns 
  */
 export function compile(fileName, dissallowedFiles, nested) {
+    if (!nested) path = fileName.substring(0, fileName.lastIndexOf("/") + 1);
 	// try {
 		if (!dissallowedFiles) dissallowedFiles = [];
 		let importText;
@@ -243,7 +246,6 @@ function getArgs(input) {
  * @returns The result of the expression
  */
 function evaluateExpression(expression) {
-    console.log(expression);
 	let func = new Function('return ' + String(expression).replaceAll("(", "evaluateExpression("));
 	return func().toString().replaceAll("evalExpression(", "(");
 }
@@ -324,10 +326,14 @@ function validOperator(operator) {
             break;
         case "shr":
         case ">>=":
-            operator = "right shift";
+            operator = "arithmetic right shift";
+            break;
+        case "lshr":
+        case ">>>=":
+            operator = "logical right shift";
             break;
 	}
-	if (!['increment', 'decrement', 'set', 'multiply', 'divide', "unset", "bitwise and", "bitwise or", "bitwise xor", "left shift", "right shift"].includes(operator.toLowerCase())) return `Unknown operator &e${operator}&c on &eline {line}`;
+	if (!['increment', 'decrement', 'set', 'multiply', 'divide', "unset", "bitwise and", "bitwise or", "bitwise xor", "left shift", "arithmetic right shift", "logical right shift"].includes(operator.toLowerCase())) return `Unknown operator &e${operator}&c on &eline {line}`;
 	return operator.toUpperCase();
 }
 
@@ -452,8 +458,8 @@ function componentFunc(args, syntax, menu) {
 			if (typeof args[j] == "object") {
 				args[j].type = "clickSlot";
 			} else {
-				if (!FileLib.exists("HTSL", `imports/${args[j]}.json`)) return `Unknown item &e${args[j]}&c on &eline {line}`;
-				args[j] = JSON.parse(FileLib.read("HTSL", `imports/${args[j]}.json`));
+				if (!FileLib.exists("HTSL", `imports/${path}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args[j]}.json`)) return `Unknown item &e${args[j]}&c on &eline {line}`;
+				args[j] = JSON.parse(FileLib.read("HTSL", `imports/${path}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args[j]}.json`));
 				args[j].type = "customItem";
 			}
 		}

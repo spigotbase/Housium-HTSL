@@ -278,8 +278,8 @@ register('guiMouseClick', (x, y, mouseButton) => {
 	}
 
 	handleInputClick(importButton, compile, x, y);
-	// handleInputClick(exportButton, exportAction, x, y);
-	handleInputClick(exportButton, () => { ChatLib.chat("&3[HTSL] &eBecause of the recent update, exporting is currently disabled."); }, x, y);
+	handleInputClick(exportButton, exportAction, x, y);
+	// handleInputClick(exportButton, () => { ChatLib.chat("&3[HTSL] &eBecause of the recent update, exporting is currently disabled."); }, x, y);
 
 	let index = -1;
 	if (x >= input.getX() && x <= input.getX() + input.getWidth()) {
@@ -443,4 +443,8 @@ function readDir(path, walk) {
 		}
 	});
 	return fileNames;
+}
+
+export function getSubDir() {
+    return subDir;
 }
