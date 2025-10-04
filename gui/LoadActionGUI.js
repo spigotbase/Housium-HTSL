@@ -296,7 +296,7 @@ register('guiMouseClick', (x, y, mouseButton) => {
 			if (x < input.getX() + input.getWidth() - 8 && x > input.getX() + input.getWidth() - 24) {
 				trashSound.rewind();
 				trashSound.play();
-				FileLib.delete("HTSL", `imports/${subDir.replace("\\", "/")}${filteredFiles[index]}`);
+				FileLib.delete("HTSL", `imports/${subDir.replaceAll("\\", "/")}${filteredFiles[index]}`);
 				files = [];
 				filteredFiles = [];
 				readFiles();
@@ -305,7 +305,7 @@ register('guiMouseClick', (x, y, mouseButton) => {
 		}
 		if (filteredFiles[index].endsWith('.htsl')) {
 			if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) ChatLib.command("gmc");
-			if (compile(subDir.replace("\\", "/") + filteredFiles[index].substring(0, filteredFiles[index].length - 5))) World.playSound('random.click', 0.5, 1);
+			if (compile(subDir.replace(/\\/g, "/") + filteredFiles[index].substring(0, filteredFiles[index].length - 5))) World.playSound('random.click', 0.5, 1);
 			if (Settings.saveFiles) {
 				input.setText(filteredFiles[index].substring(0, filteredFiles[index].length - 5));
 				filteredFiles = files.filter(n => n.toLowerCase().includes(input.getText().toLowerCase()));
@@ -321,7 +321,7 @@ register('guiMouseClick', (x, y, mouseButton) => {
 				World.playSound('mob.villager.no', 0.5, 1);
 				return ChatLib.chat(`&3[HTSL] &cMust be in creative mode to import an item!`);
 			}
-			let nbt = JSON.parse(FileLib.read('HTSL', `/imports/${subDir.replace("\\", "/") + filteredFiles[index]}`)).item;
+			let nbt = JSON.parse(FileLib.read('HTSL', `/imports/${subDir.replaceAll("\\", "/") + filteredFiles[index]}`)).item;
 			let item = getItemFromNBT(nbt);
 			let slot = Player.getInventory().getItems().indexOf(null);
 			if (slot < 9) slot += 36;

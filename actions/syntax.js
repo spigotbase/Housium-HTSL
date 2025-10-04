@@ -33,12 +33,12 @@ export default {
         },
         globalstat: {
             type: "CHANGE_VARIABLE",
-            full: "globalstat <variable> <mode> <value>",
+            full: "globalstat <variable> <operation> <value>",
             from: "globalstat"
         },
         globalvar: {
             type: "CHANGE_VARIABLE",
-            full: "globalvar <variable> <mode> <value> <automatic_unset>",
+            full: "globalvar <variable> <operation> <value> <automatic_unset>",
             from: "globalvar"
         },
         changeHealth: {
@@ -63,22 +63,22 @@ export default {
         },
         stat: {
             type: "CHANGE_VARIABLE",
-            full: "stat <variable> <mode> <value>",
+            full: "stat <variable> <operation> <value>",
             from: "stat"
         },
         var: {
             type: "CHANGE_VARIABLE",
-            full: "var <variable> <mode> <value> <automatic_unset>",
+            full: "var <variable> <operation> <value> <automatic_unset>",
             from: "var"
         },
         teamstat: {
             type: "CHANGE_VARIABLE",
-            full: "teamstat <variable> <team> <mode> <value>",
+            full: "teamstat <variable> <team> <operation> <value>",
             from: "teamstat"
         },
         teamvar: {
             type: "CHANGE_VARIABLE",
-            full: "teamvar <variable> <team> <mode> <value> <automatic_unset>",
+            full: "teamvar <variable> <team> <operation> <value> <automatic_unset>",
             from: "teamvar"
         },
         clearEffects: {

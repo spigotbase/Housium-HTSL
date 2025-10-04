@@ -20,7 +20,7 @@ export function isImporting() {
  */
 export function compile(fileName, dissallowedFiles, nested) {
     if (!nested) path = fileName.substring(0, fileName.lastIndexOf("/") + 1);
-	// try {
+	try {
 		if (!dissallowedFiles) dissallowedFiles = [];
 		let importText;
 		if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${fileName}.htsl`)) {
@@ -69,11 +69,11 @@ export function compile(fileName, dissallowedFiles, nested) {
 		if (!nested) {
 			if (!loadAction(actionobj)) return false;
 		} else return actionobj.map(n => { n.compiled = true; return n });
-	// } catch (error) {
-	// 	ChatLib.chat(`&3[HTSL] &eEncountered an unknown error, please seek support about the following error:`);
-	// 	ChatLib.chat(error);
-	// 	console.error(error);
-	// }
+	} catch (error) {
+		ChatLib.chat(`&3[HTSL] &eEncountered an unknown error, please seek support about the following error:`);
+		ChatLib.chat(error);
+		console.error(error);
+	}
 }
 
 /**
@@ -182,7 +182,7 @@ function getArgs(input) {
 				shortcuts.forEach((shortcut) => {
 					arg = arg.replaceAll(shortcut.name, shortcut.value);
 				});
-				// try {
+				try {
 					arg = evaluateExpression(arg);
 					let shortcut = shortcuts.find(m => m.name === arg);
 					if (shortcut) {
@@ -203,9 +203,9 @@ function getArgs(input) {
 					else if (arg !== "") args.push(arg);
 					arg = "";
 					continue;
-				// } catch (e) {
-				// 	return false; // Invalid expression
-				// }
+				} catch (e) {
+					return false; // Invalid expression
+				}
 			} else {
                 if (input[i] === "\\" && ["\"", "(", "{", "%", "\\"].includes(input[i + 1])) i++;
 

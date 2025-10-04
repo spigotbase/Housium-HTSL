@@ -96,7 +96,7 @@ function convertComponent(obj, syntax, menu, condition) {
             action = action.replace(property, obj[propertyName] == true ? "!" : "");
         } else if (propertyName === "match_any_condition") {
             action = action.replace(property, obj[propertyName] ? "or" : "and");
-        } else if (["mode", "comparator"].includes(propertyName)) {
+        } else if (["mode", "comparator", "operation"].includes(propertyName)) {
             action = action.replace(property, reverseMode(obj[propertyName]));
         } else if (menu[propertyName].type == "subactions") {
             let actions = obj[propertyName];
@@ -201,6 +201,18 @@ function reverseMode(mode) {
             return "*=";
         case "Divide":
             return "/=";
+        case "Bitwise AND":
+            return "&=";
+        case "Bitwise OR":
+            return "|=";
+        case "Bitwise XOR":
+            return "^=";
+        case "Left Shift":
+            return "<<=";
+        case "Arithmetic Right Shift":
+            return ">>=";
+        case "Logical Right Shift":
+            return ">>>=";
         default:
             return mode;
     }

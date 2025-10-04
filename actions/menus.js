@@ -25,7 +25,7 @@ export default {
             default_value: "Kills",
             type: "string_input"
         },
-        mode: {
+        operation: {
             slot: 13,
             default_value: "INCREMENT",
             type: "static_option_select",
