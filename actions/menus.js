@@ -603,7 +603,7 @@ export default {
             default_value: true,
             type: "toggle"
         },
-        disable_item_merging: {
+        prevent_item_merging: {
             slot: 13,
             default_value: false,
             type: "toggle"

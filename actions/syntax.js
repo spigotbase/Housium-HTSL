@@ -187,7 +187,7 @@ export default {
         },
         dropItem: {
             type: "DROP_ITEM",
-            full: "dropItem <item> <location> <drop_naturally> <disable_item_merging> <prioritize_player> <fallback_to_inventory> <despawn_duration_ticks> <pickup_delay_ticks>"
+            full: "dropItem <item> <location> <drop_naturally> <prevent_item_merging> <prioritize_player> <fallback_to_inventory> <despawn_duration_ticks> <pickup_delay_ticks>"
         },
         changeVelocity: {
             type: "CHANGE_VELOCITY",
