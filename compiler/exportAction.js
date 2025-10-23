@@ -44,7 +44,7 @@ export default (fileName) => {
 function processPage(items, actionList, menuList, condition) {
     forceOperation({
         type: "donePage", func: () => {
-            if (Player.getContainer().getItems()[Player.getContainer().getSize() - 37]) if (ChatLib.removeFormatting(Player.getContainer().getItems()[Player.getContainer().getSize() - 37].getName()) == "Next Page") {
+            if (Player.getContainer().getItems()[Player.getContainer().getSize() - 37]) if (ChatLib.removeFormatting(Player.getContainer().getItems()[Player.getContainer().getSize() - 37].getName()) == "Left-click for next page!") {
                 let nextItems = Player.getContainer().getItems();
                 nextItems = nextItems.splice(0, Player.getContainer().getSize() - 9 - 36);
                 forceOperation({

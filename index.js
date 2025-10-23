@@ -107,7 +107,7 @@ register("command", ...args => {
         let file = args.join(" ");
         if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${file}.htsl`)) {
             Navigator.isReady = true;
-            let actions = compile(file, [], true);
+            let actions = compile(`${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${file}`, [], true);
             actions = actions.filter(n => n.context !== "DEFAULT");
             loadAction(actions, Settings.deleteOnCommandImport);
             return;

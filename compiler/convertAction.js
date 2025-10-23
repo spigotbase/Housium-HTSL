@@ -152,7 +152,7 @@ function convertComponent(obj, syntax, menu, condition) {
             action = action.replace(property, `${exportName}_item${items.length}`);
             return;
         } else if (obj[propertyName] != null) {
-            obj[propertyName] = String(obj[propertyName]).replaceAll(/("|\\)/g, "\\$1");
+            obj[propertyName] = String(obj[propertyName]).replaceAll(/([^$])("|\\)([^^])/g, "$1\\$2$3");
             action = action.replace(property, hasUncontainedSpace(String(obj[propertyName])) ? `"${obj[propertyName]}"` : obj[propertyName]).replaceAll("§", "&");
         } else action = action.replace(property, "null");
     });

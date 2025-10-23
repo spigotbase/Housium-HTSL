@@ -180,7 +180,7 @@ function getArgs(input) {
 				inCurlyBrackets = false;
 				// If the argument is in curly brackets
 				shortcuts.forEach((shortcut) => {
-					arg = arg.replaceAll(shortcut.name, shortcut.value);
+                    arg = arg.replaceAll(new RegExp(`(\\b)${shortcut.name}(\\b)`, "g"), `$1${shortcut.value}$2`);
 				});
 				try {
 					arg = evaluateExpression(arg);
@@ -246,6 +246,7 @@ function getArgs(input) {
  * @returns The result of the expression
  */
 function evaluateExpression(expression) {
+    console.log(expression);
 	let func = new Function('return ' + String(expression).replaceAll("(", "evaluateExpression("));
 	return func().toString().replaceAll("evalExpression(", "(");
 }
