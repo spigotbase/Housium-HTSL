@@ -13,7 +13,7 @@ xSizeField.setAccessible(true);
 // init buttons
 const importButton = new Button(0, 0, 0, 20, 'Import HTSL');
 const exportButton = new Button(0, 0, 0, 20, 'Export HTSL');
-const openImportsButton = new Button(0, 0, 0, 20, 'Open Imports Folder');
+const openImportsButton = new Button(0, 0, 0, 20, 'Open Folder');
 const refreshFiles = new Button(0, 0, 0, 20, '⟳');
 const backDir = new Button(0, 0, 0, 20, '⇪');
 const forwardPage = new Button(0, 0, 15, 20, '⇨');
@@ -252,17 +252,18 @@ register('guiMouseClick', (x, y, mouseButton) => {
 	} else {
 		input.setEnabled(false);
 	}
-	if (isButtonHovered(openImportsButton, x, y)) {
-		try {
-			const folder = new java.io.File("./config/ChatTriggers/modules/HTSL/imports");
-			const desktop = java.awt.Desktop.getDesktop();
-			desktop.open(folder);
-			World.playSound('random.click', 0.5, 1);
-		} catch (e) {
-			ChatLib.chat("&3[HTSL] &cFailed to open imports folder!");
-			console.error(e);
-		}
-	}
+if (isButtonHovered(openImportsButton, x, y)) {
+    try {
+        const folderPath = `./config/ChatTriggers/modules/HTSL/imports/${subDir.replace(/\\+/g, "/")}`;
+        const folder = new java.io.File(folderPath);
+        const desktop = java.awt.Desktop.getDesktop();
+        desktop.open(folder);
+        World.playSound('random.click', 0.5, 1);
+    } catch (e) {
+        ChatLib.chat("&3[HTSL] &cFailed to open folder!");
+        console.error(e);
+    }
+}
 
 	if (isButtonHovered(refreshFiles, x, y)) { readFiles(); World.playSound('random.click', 0.5, 1) }
 	if (subDir != "" && isButtonHovered(backDir, x, y)) {
